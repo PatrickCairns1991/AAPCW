@@ -156,7 +156,8 @@ void AdvancedAudioProcessingCourseworkAudioProcessor::processBlock (AudioBuffer<
     //This prevents recalculating the constants for each sample, and therefore decreases processing load.
     
     //Calculate pdash for stereo panning
-    float pDashStereo = (StereoPanPosition + 1.0) / 2.0;
+    float pDashStereoLinear = (StereoPanPosition + 1.0) / 2.0;
+    float pDashStereoConstant = (3.14159265359 * (StereoPanPosition + 1))/4;
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -166,13 +167,27 @@ void AdvancedAudioProcessingCourseworkAudioProcessor::processBlock (AudioBuffer<
         
         for (int i = 0; i < buffer.getNumSamples(); i++)
         {
-            if (channel == 0) // Left channel
+            if (AlgoChoiceIndex==0)//Linear Panning
             {
-                channelData[i] = channelData[i] * (1.0 - pDashStereo);
+                if (channel == 0) // Left channel
+                {
+                    channelData[i] = channelData[i] * (1.0 - pDashStereoLinear);
+                }
+                else // Right channel (or any other channel)
+                {
+                channelData[i] = channelData[i] * pDashStereoLinear;
+                }
             }
-            else // Right channel (or any other channel)
+            else if(AlgoChoiceIndex==1)//Constant Power
             {
-                channelData[i] = channelData[i] * pDashStereo;
+                if (channel == 0) // Left channel
+                {
+                    channelData[i] = channelData[i] * cos(pDashStereoConstant);
+                }
+                else // Right channel (or any other channel)
+                {
+                channelData[i] = channelData[i] * sin(pDashStereoConstant);
+                }
             }
         }
 

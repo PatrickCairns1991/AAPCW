@@ -57,6 +57,9 @@ public:
     
     //Declare float to store stereo pan position
     float StereoPanPosition;
+    
+    //Declare Integer to store Index for StereoPanningAlgorithm ComboBox Choice
+	int AlgoChoiceIndex;
 
 private:
     //==============================================================================

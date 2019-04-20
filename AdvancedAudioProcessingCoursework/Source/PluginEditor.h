@@ -38,7 +38,8 @@
                                                                     //[/Comments]
 */
 class AdvancedAudioProcessingCourseworkAudioProcessorEditor  : public AudioProcessorEditor,
-                                                               public Slider::Listener
+                                                               public Slider::Listener,
+                                                               public ComboBox::Listener
 {
 public:
     //==============================================================================
@@ -52,6 +53,7 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
 
 
 
@@ -65,6 +67,7 @@ private:
 
     //==============================================================================
     std::unique_ptr<Slider> sliderStereoPanPosition;
+    std::unique_ptr<ComboBox> comboBoxStereoPanningAlgorithm;
 
 
     //==============================================================================

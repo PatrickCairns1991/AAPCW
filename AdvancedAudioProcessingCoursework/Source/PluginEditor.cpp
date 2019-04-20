@@ -41,8 +41,13 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     sliderStereoPanPosition->addListener (this);
 
     sliderStereoPanPosition->setBounds (24, 24, 128, 144);
-
-
+    
+    //***A clipping is apparent when we load in REAPER and automute applied if the pan slider is untouched.
+    //***This happens because StereoPanPosition float does not have a startup value.
+    //***As such it can contain grabage and therefore triggers REAPER automute (channel gain is garbage).
+    //***Adding this in constructor seems to have fixed the bug.
+    processor.StereoPanPosition = 0;
+    
     //[UserPreSize]
     //[/UserPreSize]
 

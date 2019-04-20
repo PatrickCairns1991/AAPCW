@@ -33,6 +33,15 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
 
+    sliderStereoPanPosition.reset (new Slider ("new slider"));
+    addAndMakeVisible (sliderStereoPanPosition.get());
+    sliderStereoPanPosition->setRange (-1, 1, 0);
+    sliderStereoPanPosition->setSliderStyle (Slider::Rotary);
+    sliderStereoPanPosition->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
+    sliderStereoPanPosition->addListener (this);
+
+    sliderStereoPanPosition->setBounds (24, 24, 128, 144);
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -49,6 +58,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::~AdvancedAudioProcessingC
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
 
+    sliderStereoPanPosition = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -76,6 +86,25 @@ void AdvancedAudioProcessingCourseworkAudioProcessorEditor::resized()
     //[/UserResized]
 }
 
+void AdvancedAudioProcessingCourseworkAudioProcessorEditor::sliderValueChanged (Slider* sliderThatWasMoved)
+{
+    //[UsersliderValueChanged_Pre]
+    //[/UsersliderValueChanged_Pre]
+
+    if (sliderThatWasMoved == sliderStereoPanPosition.get())
+    {
+        //[UserSliderCode_sliderStereoPanPosition] -- add your slider handling code here..
+
+        //Added to read value from StereoPanPosition Rotary Dial and hold in float StereoPanPosition
+        processor.StereoPanPosition = sliderStereoPanPosition->getValue();
+
+        //[/UserSliderCode_sliderStereoPanPosition]
+    }
+
+    //[UsersliderValueChanged_Post]
+    //[/UsersliderValueChanged_Post]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
@@ -98,6 +127,11 @@ BEGIN_JUCER_METADATA
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.33"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff323e44"/>
+  <SLIDER name="new slider" id="9149587c35e9c167" memberName="sliderStereoPanPosition"
+          virtualName="" explicitFocusOrder="0" pos="24 24 128 144" min="-1.0"
+          max="1.0" int="0.0" style="Rotary" textBoxPos="TextBoxBelow"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
+          needsCallback="1"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

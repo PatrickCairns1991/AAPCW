@@ -144,15 +144,37 @@ void AdvancedAudioProcessingCourseworkAudioProcessor::processBlock (AudioBuffer<
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    
+    //Any Constants used in channel data processing may be calculated here.
+    //This prevents recalculating the constants for each sample, and therefore decreases processing load.
+    
+    //Calculate pdash for stereo panning
+    float pDashStereo = (StereoPanPosition + 1.0) / 2.0;
+    
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
+        
+        //For Loop Added to process Stereo Panning For Linear Gain as in Lab 4
+        
+        for (int i = 0; i < buffer.getNumSamples(); i++)
+        {
+            if (channel == 0) // Left channel
+            {
+                channelData[i] = channelData[i] * (1.0 - pDashStereo);
+            }
+            else // Right channel (or any other channel)
+            {
+                channelData[i] = channelData[i] * pDashStereo;
+            }
+        }
 
         // ..do something to the data...
     }

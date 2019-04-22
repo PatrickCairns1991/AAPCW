@@ -64,8 +64,11 @@ public:
     //Declare Integer to store Index for StereoPanningAlgorithm ComboBox Choice
 	int AlgoChoiceIndex;
 	
-	//Declare Integer to store Index for ComboBoxInputSelectIndex
+	//Declare Integer to store Index for ComboBoxInputChoiceIndex
 	int InputChoiceIndex;
+	
+	//Declare Integer to store Index for ComboBoxOutputChoiceIndex
+	int OutputChoiceIndex;
 
 private:
     //==============================================================================

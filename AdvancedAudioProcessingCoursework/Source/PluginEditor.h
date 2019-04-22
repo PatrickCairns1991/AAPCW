@@ -70,6 +70,7 @@ private:
     std::unique_ptr<ComboBox> comboBoxStereoPanningAlgorithm;
     std::unique_ptr<Slider> sliderStereoWidth;
     std::unique_ptr<ComboBox> comboBoxInputSelect;
+    std::unique_ptr<ComboBox> comboBoxOutputSelect;
 
 
     //==============================================================================

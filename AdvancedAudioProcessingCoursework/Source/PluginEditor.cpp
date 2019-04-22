@@ -40,7 +40,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     sliderStereoPanPosition->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     sliderStereoPanPosition->addListener (this);
 
-    sliderStereoPanPosition->setBounds (32, 104, 128, 144);
+    sliderStereoPanPosition->setBounds (8, 96, 128, 144);
 
     comboBoxStereoPanningAlgorithm.reset (new ComboBox ("Panning Combo"));
     addAndMakeVisible (comboBoxStereoPanningAlgorithm.get());
@@ -52,7 +52,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     comboBoxStereoPanningAlgorithm->addItem (TRANS("Equal Power"), 2);
     comboBoxStereoPanningAlgorithm->addListener (this);
 
-    comboBoxStereoPanningAlgorithm->setBounds (200, 296, 150, 24);
+    comboBoxStereoPanningAlgorithm->setBounds (16, 288, 128, 24);
 
     sliderStereoWidth.reset (new Slider ("WidthSlider"));
     addAndMakeVisible (sliderStereoWidth.get());
@@ -61,7 +61,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     sliderStereoWidth->setTextBoxStyle (Slider::TextBoxBelow, false, 80, 20);
     sliderStereoWidth->addListener (this);
 
-    sliderStereoWidth->setBounds (200, 112, 128, 144);
+    sliderStereoWidth->setBounds (152, 96, 128, 144);
 
     comboBoxInputSelect.reset (new ComboBox ("Input Combo"));
     addAndMakeVisible (comboBoxInputSelect.get());
@@ -73,7 +73,19 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     comboBoxInputSelect->addItem (TRANS("Mid-Side"), 2);
     comboBoxInputSelect->addListener (this);
 
-    comboBoxInputSelect->setBounds (32, 56, 150, 24);
+    comboBoxInputSelect->setBounds (16, 56, 112, 24);
+
+    comboBoxOutputSelect.reset (new ComboBox ("Output Combo"));
+    addAndMakeVisible (comboBoxOutputSelect.get());
+    comboBoxOutputSelect->setEditableText (false);
+    comboBoxOutputSelect->setJustificationType (Justification::centredLeft);
+    comboBoxOutputSelect->setTextWhenNothingSelected (String());
+    comboBoxOutputSelect->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
+    comboBoxOutputSelect->addItem (TRANS("Stereo"), 1);
+    comboBoxOutputSelect->addItem (TRANS("Mid-Side"), 2);
+    comboBoxOutputSelect->addListener (this);
+
+    comboBoxOutputSelect->setBounds (160, 56, 112, 24);
 
 
     //[UserPreSize]
@@ -89,6 +101,9 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
 
 	//Set default choice index for Input Selection
 	processor.InputChoiceIndex = 0;
+	
+	//Set default choice index for Output Selection
+	processor.OutputChoiceIndex = 0;
 
 	//***A clipping is apparent when we load in REAPER and automute applied if the pan slider is untouched.
 	//***This happens because StereoPanPosition float does not have a startup value.
@@ -111,6 +126,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::~AdvancedAudioProcessingC
     comboBoxStereoPanningAlgorithm = nullptr;
     sliderStereoWidth = nullptr;
     comboBoxInputSelect = nullptr;
+    comboBoxOutputSelect = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -126,7 +142,7 @@ void AdvancedAudioProcessingCourseworkAudioProcessorEditor::paint (Graphics& g)
     g.fillAll (Colour (0xff323e44));
 
     {
-        int x = 164, y = 260, width = 200, height = 30;
+        int x = 20, y = 252, width = 116, height = 30;
         String text (TRANS("Panning Algorithm"));
         Colour fillColour = Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
@@ -138,7 +154,7 @@ void AdvancedAudioProcessingCourseworkAudioProcessorEditor::paint (Graphics& g)
     }
 
     {
-        int x = 36, y = 12, width = 148, height = 36;
+        int x = 12, y = 12, width = 124, height = 36;
         String text (TRANS("Input Format"));
         Colour fillColour = Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
@@ -150,7 +166,7 @@ void AdvancedAudioProcessingCourseworkAudioProcessorEditor::paint (Graphics& g)
     }
 
     {
-        int x = 204, y = 12, width = 148, height = 36;
+        int x = 156, y = 12, width = 132, height = 36;
         String text (TRANS("Output Fomat"));
         Colour fillColour = Colours::black;
         //[UserPaintCustomArguments] Customize the painting arguments here..
@@ -220,9 +236,20 @@ void AdvancedAudioProcessingCourseworkAudioProcessorEditor::comboBoxChanged (Com
     {
         //[UserComboBoxCode_comboBoxInputSelect] -- add your combo box handling code here..
 
+        //When combo box selection is changed store index in int InputChoiceIndex
         processor.InputChoiceIndex = comboBoxInputSelect->getSelectedItemIndex();
 
         //[/UserComboBoxCode_comboBoxInputSelect]
+    }
+    else if (comboBoxThatHasChanged == comboBoxOutputSelect.get())
+    {
+        //[UserComboBoxCode_comboBoxOutputSelect] -- add your combo box handling code here..
+
+        //When combo box selection is changed store index in int OutputChoiceIndex
+        processor.OutputChoiceIndex = comboBoxOutputSelect->getSelectedItemIndex();
+
+
+        //[/UserComboBoxCode_comboBoxOutputSelect]
     }
 
     //[UsercomboBoxChanged_Post]
@@ -251,33 +278,37 @@ BEGIN_JUCER_METADATA
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.33"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff323e44">
-    <TEXT pos="164 260 200 30" fill="solid: ff000000" hasStroke="0" text="Panning Algorithm"
+    <TEXT pos="20 252 116 30" fill="solid: ff000000" hasStroke="0" text="Panning Algorithm"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="36"/>
-    <TEXT pos="36 12 148 36" fill="solid: ff000000" hasStroke="0" text="Input Format"
+    <TEXT pos="12 12 124 36" fill="solid: ff000000" hasStroke="0" text="Input Format"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="36"/>
-    <TEXT pos="204 12 148 36" fill="solid: ff000000" hasStroke="0" text="Output Fomat"
+    <TEXT pos="156 12 132 36" fill="solid: ff000000" hasStroke="0" text="Output Fomat"
           fontname="Default font" fontsize="15.0" kerning="0.0" bold="0"
           italic="0" justification="36"/>
   </BACKGROUND>
   <SLIDER name="PanSlider" id="9149587c35e9c167" memberName="sliderStereoPanPosition"
-          virtualName="" explicitFocusOrder="0" pos="32 104 128 144" min="-1.0"
+          virtualName="" explicitFocusOrder="0" pos="8 96 128 144" min="-1.0"
           max="1.0" int="0.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <COMBOBOX name="Panning Combo" id="cf755da7e47243ed" memberName="comboBoxStereoPanningAlgorithm"
-            virtualName="" explicitFocusOrder="0" pos="200 296 150 24" editable="0"
+            virtualName="" explicitFocusOrder="0" pos="16 288 128 24" editable="0"
             layout="33" items="Linear&#10;Equal Power" textWhenNonSelected="Linear"
             textWhenNoItems="(no choices)"/>
   <SLIDER name="WidthSlider" id="69ea6263bdd08eee" memberName="sliderStereoWidth"
-          virtualName="" explicitFocusOrder="0" pos="200 112 128 144" min="0.0"
+          virtualName="" explicitFocusOrder="0" pos="152 96 128 144" min="0.0"
           max="2.0" int="0.0" style="Rotary" textBoxPos="TextBoxBelow"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1.0"
           needsCallback="1"/>
   <COMBOBOX name="Input Combo" id="2c089223bb5a65e3" memberName="comboBoxInputSelect"
-            virtualName="" explicitFocusOrder="0" pos="32 56 150 24" editable="0"
+            virtualName="" explicitFocusOrder="0" pos="16 56 112 24" editable="0"
             layout="33" items="Stereo&#10;Mid-Side" textWhenNonSelected="Stereo"
+            textWhenNoItems="(no choices)"/>
+  <COMBOBOX name="Output Combo" id="445defdb571c2659" memberName="comboBoxOutputSelect"
+            virtualName="" explicitFocusOrder="0" pos="160 56 112 24" editable="0"
+            layout="33" items="Stereo&#10;Mid-Side" textWhenNonSelected=""
             textWhenNoItems="(no choices)"/>
 </JUCER_COMPONENT>
 

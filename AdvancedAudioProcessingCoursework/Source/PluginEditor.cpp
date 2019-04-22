@@ -49,7 +49,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     comboBoxStereoPanningAlgorithm->setTextWhenNothingSelected (TRANS("Linear"));
     comboBoxStereoPanningAlgorithm->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
     comboBoxStereoPanningAlgorithm->addItem (TRANS("Linear"), 1);
-    comboBoxStereoPanningAlgorithm->addItem (TRANS("Equal Power"), 2);
+    comboBoxStereoPanningAlgorithm->addItem (TRANS("Constant Power"), 2);
     comboBoxStereoPanningAlgorithm->addListener (this);
 
     comboBoxStereoPanningAlgorithm->setBounds (16, 288, 128, 24);
@@ -79,13 +79,20 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
     addAndMakeVisible (comboBoxOutputSelect.get());
     comboBoxOutputSelect->setEditableText (false);
     comboBoxOutputSelect->setJustificationType (Justification::centredLeft);
-    comboBoxOutputSelect->setTextWhenNothingSelected (String());
+    comboBoxOutputSelect->setTextWhenNothingSelected (TRANS("Stereo"));
     comboBoxOutputSelect->setTextWhenNoChoicesAvailable (TRANS("(no choices)"));
     comboBoxOutputSelect->addItem (TRANS("Stereo"), 1);
     comboBoxOutputSelect->addItem (TRANS("Mid-Side"), 2);
     comboBoxOutputSelect->addListener (this);
 
     comboBoxOutputSelect->setBounds (160, 56, 112, 24);
+
+    toggleButtonPolarity.reset (new ToggleButton ("Polarity Invert Toggle"));
+    addAndMakeVisible (toggleButtonPolarity.get());
+    toggleButtonPolarity->setButtonText (TRANS("Invert Ploarity"));
+    toggleButtonPolarity->addListener (this);
+
+    toggleButtonPolarity->setBounds (176, 288, 150, 24);
 
 
     //[UserPreSize]
@@ -101,7 +108,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::AdvancedAudioProcessingCo
 
 	//Set default choice index for Input Selection
 	processor.InputChoiceIndex = 0;
-	
+
 	//Set default choice index for Output Selection
 	processor.OutputChoiceIndex = 0;
 
@@ -127,6 +134,7 @@ AdvancedAudioProcessingCourseworkAudioProcessorEditor::~AdvancedAudioProcessingC
     sliderStereoWidth = nullptr;
     comboBoxInputSelect = nullptr;
     comboBoxOutputSelect = nullptr;
+    toggleButtonPolarity = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -256,6 +264,25 @@ void AdvancedAudioProcessingCourseworkAudioProcessorEditor::comboBoxChanged (Com
     //[/UsercomboBoxChanged_Post]
 }
 
+void AdvancedAudioProcessingCourseworkAudioProcessorEditor::buttonClicked (Button* buttonThatWasClicked)
+{
+    //[UserbuttonClicked_Pre]
+    //[/UserbuttonClicked_Pre]
+
+    if (buttonThatWasClicked == toggleButtonPolarity.get())
+    {
+        //[UserButtonCode_toggleButtonPolarity] -- add your button handler code here..
+
+        //When button state is toggled store Toggle State in Invert Boolean
+        processor.Invert = toggleButtonPolarity->getToggleState();
+
+        //[/UserButtonCode_toggleButtonPolarity]
+    }
+
+    //[UserbuttonClicked_Post]
+    //[/UserbuttonClicked_Post]
+}
+
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
@@ -295,7 +322,7 @@ BEGIN_JUCER_METADATA
           needsCallback="1"/>
   <COMBOBOX name="Panning Combo" id="cf755da7e47243ed" memberName="comboBoxStereoPanningAlgorithm"
             virtualName="" explicitFocusOrder="0" pos="16 288 128 24" editable="0"
-            layout="33" items="Linear&#10;Equal Power" textWhenNonSelected="Linear"
+            layout="33" items="Linear&#10;Constant Power" textWhenNonSelected="Linear"
             textWhenNoItems="(no choices)"/>
   <SLIDER name="WidthSlider" id="69ea6263bdd08eee" memberName="sliderStereoWidth"
           virtualName="" explicitFocusOrder="0" pos="152 96 128 144" min="0.0"
@@ -308,8 +335,11 @@ BEGIN_JUCER_METADATA
             textWhenNoItems="(no choices)"/>
   <COMBOBOX name="Output Combo" id="445defdb571c2659" memberName="comboBoxOutputSelect"
             virtualName="" explicitFocusOrder="0" pos="160 56 112 24" editable="0"
-            layout="33" items="Stereo&#10;Mid-Side" textWhenNonSelected=""
+            layout="33" items="Stereo&#10;Mid-Side" textWhenNonSelected="Stereo"
             textWhenNoItems="(no choices)"/>
+  <TOGGLEBUTTON name="Polarity Invert Toggle" id="850a10483ad360d3" memberName="toggleButtonPolarity"
+                virtualName="" explicitFocusOrder="0" pos="176 288 150 24" buttonText="Invert Ploarity"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

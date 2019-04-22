@@ -69,6 +69,9 @@ public:
 	
 	//Declare Integer to store Index for ComboBoxOutputChoiceIndex
 	int OutputChoiceIndex;
+	
+	//Declare Boolean Operator (True or False) to store Invert Polarity toggle state
+	bool Invert;
 
 private:
     //==============================================================================

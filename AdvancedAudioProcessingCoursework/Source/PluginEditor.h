@@ -39,7 +39,8 @@
 */
 class AdvancedAudioProcessingCourseworkAudioProcessorEditor  : public AudioProcessorEditor,
                                                                public Slider::Listener,
-                                                               public ComboBox::Listener
+                                                               public ComboBox::Listener,
+                                                               public Button::Listener
 {
 public:
     //==============================================================================
@@ -54,6 +55,7 @@ public:
     void resized() override;
     void sliderValueChanged (Slider* sliderThatWasMoved) override;
     void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
@@ -71,6 +73,7 @@ private:
     std::unique_ptr<Slider> sliderStereoWidth;
     std::unique_ptr<ComboBox> comboBoxInputSelect;
     std::unique_ptr<ComboBox> comboBoxOutputSelect;
+    std::unique_ptr<ToggleButton> toggleButtonPolarity;
 
 
     //==============================================================================

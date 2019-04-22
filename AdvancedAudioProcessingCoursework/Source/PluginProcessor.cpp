@@ -24,6 +24,7 @@ AdvancedAudioProcessingCourseworkAudioProcessor::AdvancedAudioProcessingCoursewo
                        )
 #endif
 {
+
 }
 
 AdvancedAudioProcessingCourseworkAudioProcessor::~AdvancedAudioProcessingCourseworkAudioProcessor()
@@ -154,10 +155,18 @@ void AdvancedAudioProcessingCourseworkAudioProcessor::processBlock (AudioBuffer<
     
     //Any Constants used in channel data processing may be calculated here.
     //This prevents recalculating the constants for each sample, and therefore decreases processing load.
+    //It is also useful to calculate any user input variables here, so that these will only be computed on parameter change and not every sample.
     
     //Calculate pdash for stereo panning
+    //Linear Panning algorithm pDash
     float pDashStereoLinear = (StereoPanPosition + 1.0) / 2.0;
+    
+    //ConstantPower panning algorithm pDash
     float pDashStereoConstant = (3.14159265359 * (StereoPanPosition + 1))/4;
+    
+    //Store Width in float width. Calculate (2-w).
+    float Width = StereoWidth;
+    float WidthRightElement = 2 - StereoWidth;
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {

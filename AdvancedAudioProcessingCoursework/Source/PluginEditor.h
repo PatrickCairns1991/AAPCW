@@ -68,6 +68,8 @@ private:
     //==============================================================================
     std::unique_ptr<Slider> sliderStereoPanPosition;
     std::unique_ptr<ComboBox> comboBoxStereoPanningAlgorithm;
+    std::unique_ptr<Slider> sliderStereoWidth;
+    std::unique_ptr<ComboBox> comboBoxInputSelect;
 
 
     //==============================================================================
